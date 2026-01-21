@@ -186,7 +186,7 @@ class _NGENIXClient(object):
         try:
             new_records = {'records': new_dns_zone_records}
             update_dns_zone_records_res = requests.patch(f'{self.ngenix_api_host}/dns-zone/{dns_zone_id}',
-                                                         headers=self.headers, auth=self.auth, data=json.dumps(new_records), timeout=5)
+                                                         headers=self.headers, auth=self.auth, data=json.dumps(new_records), timeout=50)
             updated_dns_zone_records = update_dns_zone_records_res.json()['records']
         except Exception:
             raise errors.PluginError(
@@ -200,7 +200,7 @@ class _NGENIXClient(object):
     def _get_dns_zone_id(self, domain):
         try:
             dns_zones_res = requests.get(f'{self.ngenix_api_host}/dns-zone',
-                                         headers=self.headers, params=self.params, auth=self.auth, timeout=3)
+                                         headers=self.headers, params=self.params, auth=self.auth, timeout=30)
             dns_zones = dns_zones_res.json()['elements']
         except Exception:
             raise errors.PluginError(
@@ -222,7 +222,7 @@ class _NGENIXClient(object):
     def _get_dns_zone_records(self, dns_zone_id):
         try:
             dns_zone_res = requests.get(f'{self.ngenix_api_host}/dns-zone/{dns_zone_id}',
-                                        headers=self.headers, auth=self.auth, timeout=3)
+                                        headers=self.headers, auth=self.auth, timeout=30)
             dns_zone = dns_zone_res.json()
             dns_zone_records = dns_zone['records']
         except Exception:
