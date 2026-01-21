@@ -235,7 +235,7 @@ class _NGENIXClient(object):
         return dns_zone_records
 
     def _wait_for_record_propagation(self, record_name, record_data):
-        dig_txt = f'dig @8.8.8.8 -t TXT {record_name} +short'
+        dig_txt = f'nslookup -type-txt {record_name} 8.8.8.8'
         logger.info(f'Waiting for {record_name} propagation.')
         txt_records = [txt_record[1:-1] for txt_record in subprocess.check_output(dig_txt.split()).decode('utf-8').splitlines()]
         counter = 15
