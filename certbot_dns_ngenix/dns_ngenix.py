@@ -237,13 +237,12 @@ class _NGENIXClient(object):
     def _wait_for_record_propagation(self, record_name, record_data):
         dig_txt = f'nslookup -q=txt {record_name} 8.8.8.8'
         logger.info(f'Waiting for {record_name} propagation.')
-        txt_records = [txt_record[1:-1] for txt_record in subprocess.run(dig_txt.split(), capture_output=True, text=True).stdout.splitlines()]
+        txt_records = subprocess.run(dig_txt.split(), capture_output=True, text=True).stdout
+        # [txt_record[1:-1] for txt_record in subprocess.run(dig_txt.split(), capture_output=True, text=True).stdout.splitlines()]
         counter = 15
-        added='acme-challenge.belssb.ru\ttext = "'
-        record_data=added+record_data
         print(txt_records)
         while record_data not in txt_records:
-            txt_records = [txt_record[1:-1] for txt_record in subprocess.run(dig_txt.split(),capture_output=True, text=True).stdout.splitlines()]
+            txt_records = subprocess.run(dig_txt.split(), capture_output=True, text=True).stdout
             print(txt_records)
             counter -= 1
             if counter == 0:
