@@ -237,10 +237,10 @@ class _NGENIXClient(object):
     def _wait_for_record_propagation(self, record_name, record_data):
         dig_txt = f'nslookup -q=txt {record_name} 8.8.8.8'
         logger.info(f'Waiting for {record_name} propagation.')
-        txt_records = [txt_record[1:-1] for txt_record in subprocess.run(dig_txt.split(), capture_output=True, text=True).stdout.decode('utf-8').splitlines()]
+        txt_records = [txt_record[1:-1] for txt_record in subprocess.run(dig_txt.split(), capture_output=True, text=True).stdout.splitlines()]
         counter = 15
         while record_data not in txt_records:
-            txt_records = [txt_record[1:-1] for txt_record in subprocess.run(dig_txt.split(),capture_output=True, text=True).stdout.decode('utf-8').splitlines()]
+            txt_records = [txt_record[1:-1] for txt_record in subprocess.run(dig_txt.split(),capture_output=True, text=True).stdout.splitlines()]
             counter -= 1
             if counter == 0:
                 raise errors.PluginError(
